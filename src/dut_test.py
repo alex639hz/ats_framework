@@ -10,8 +10,6 @@ from engine.types import StepInterface
 from engine.utils import Utils
 from project.project import Project
 
-# from project.template import *
-
 logger = logging.getLogger("[user]")
 
 

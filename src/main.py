@@ -13,7 +13,7 @@ config = {
 }
 
 
-project = DutTest(config)
+# project = DutTest(config)
 
 try:
 
