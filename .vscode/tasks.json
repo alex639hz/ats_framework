@@ -1,0 +1,45 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Setup venv",
+      "type": "shell",
+      "command": "if not exist .venv python -m venv .venv && .venv\\Scripts\\python.exe -m pip install ruff mypy",
+      "options": {
+        "shell": {
+          "executable": "cmd.exe",
+          "args": ["/d", "/c"]
+        }
+      },
+      "problemMatcher": [],
+      "presentation": { "reveal": "silent" },
+      "runOptions": { "runOn": "folderOpen" }
+    },
+    {
+      "label": "Activate venv",
+      "type": "shell",
+      "command": ".venv\\Scripts\\activate.bat",
+      "options": {
+        "shell": {
+          "executable": "cmd.exe",
+          "args": ["/d", "/k"]
+        }
+      },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "Install requirements",
+      "type": "shell",
+      "command": ".venv\\Scripts\\python.exe -m pip install -r requirements.txt",
+      "options": {
+        "shell": {
+          "executable": "cmd.exe",
+          "args": ["/d", "/c"]
+        }
+      },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "shared" }
+    }
+  ]
+}

@@ -9,7 +9,7 @@ except ModuleNotFoundError:
 URL = "mongodb://@host:27017/?authSource=admin"
 DB = "ATSDB"
 
-
+"""Database class for handling MongoDB operations"""
 class Db:
     def __init__(self, url=URL, db=DB):
         if pymongo is None:

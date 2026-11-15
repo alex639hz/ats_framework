@@ -1,20 +1,18 @@
 """Author: Alex Zvuluny | Email: alex.639hz@gmail.com"""
 
+import json
 import logging
 import time
-import json
 
 from engine.framework import framework
-from engine.logger import create_log
 from engine.procedure import Procedure
 from engine.procedure_builder import ProcedureBuilder
-from engine.constants import *
 from engine.types import StepInterface
 from engine.utils import Utils
 from project.base_project import BaseProject
+from project.dut.dut_a import DutA
 
 # from project.presets.power_integrity import TestBuilderPowerSupply
-from project.dut.dut_a import DutA
 
 # from project.template import *
 
@@ -22,7 +20,6 @@ logger = logging.getLogger("[user]")
 
 
 class Project(BaseProject):
-
     def __init__(self, config):
         super().__init__(config)
         self.dut = DutA()
@@ -32,7 +29,7 @@ class Project(BaseProject):
         # project_flow_build.step_call(dut_test_)
         dut_project_procedure = project_flow_build.generate_procedure()
         # dut_test_procedure = self.build_dut_test(dut_test_)
-        USE_BASE_PROJECT = True
+        USE_BASE_PROJECT = False
         if USE_BASE_PROJECT:
             final_procedure = self.base_flow_export(dut_project_procedure)
         else:

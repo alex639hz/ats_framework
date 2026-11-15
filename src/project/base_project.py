@@ -1,18 +1,19 @@
 """Author: Alex Zvuluny | Email: alex.639hz@gmail.com"""
 
 import logging
-import time
 
 # from engine import utils
 from engine.framework import framework
 from engine.logger import create_log
 from engine.procedure import Procedure
 from engine.procedure_builder import ProcedureBuilder
-from engine.constants import *
+# from engine.constants import *
 
 # from instruments.instrument import Instrument
 from engine.types import StepInterface
 from engine.utils import Utils
+
+from project.conf import project_path
 from project.instruments.instrument_repo import repository
 from project.instruments.types.instrument_power_supply import PowerSupply
 from project.instruments.types.instrument_dmm import Dmm
@@ -69,7 +70,8 @@ class BaseProject:
 
     def runtime_create_session(self, step_interface: StepInterface):
         procedure, args = Utils.extract_step_interface(step_interface)
-        test_cases = Utils.read_json("C:/ats_python/src/project/test_cases.json")
+        # print(project_path)
+        test_cases = Utils.read_json(project_path / "test_cases.json")
         session_init = {
             # "created_at": framework.get_time_datetime(),
             "label": procedure.label,
@@ -109,6 +111,7 @@ class BaseProject:
         # return f"going next test index: {session.index}"
 
     def init_repo_by_json(self):
+        """Initialize the instrument repository from its JSON configuration."""
         json_path = f"C:/ats_python/src/project/instruments.json"
         repository.initialize_with_json(json_path)
         dmm: Dmm = repository.get_instrument_by_label("dmm")

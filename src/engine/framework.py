@@ -1,19 +1,16 @@
 """Author: Alex Zvuluny | Email: alex.639hz@gmail.com"""
 
-from datetime import datetime
-from pathlib import Path
-import threading
-import queue
 import logging
-import json
+import queue
+import threading
 import time
-from typing import Any
+from datetime import datetime
 
-from engine.procedure import Procedure
+from engine.constants import DEF_CMD, DEF_OK
 from engine.context import Context
 from engine.logger import setup_logging
 from engine.pipeline import Pipeline
-from engine.constants import *
+from engine.procedure import Procedure
 from engine.server.server_main import Server
 from engine.utils import Utils
 
@@ -31,7 +28,7 @@ class Framework:
         self.pipe_timer = Pipeline(DEF_Q_SIZE, "timer")
         self.pipe_log = Pipeline(DEF_Q_SIZE, "timer")
         self.event_shutdown = threading.Event()
-        self._procedure_list: list["Procedure"] = []
+        self._procedure_list: list[Procedure] = []
         self._procedure_dict: dict[str, dict] = {}
         self.context: Context = Context(self)
         self.server = Server()
@@ -189,10 +186,8 @@ class Framework:
     def _procedure_processor(self, procedure: Procedure):
         procedure.execution_processor(self)
 
-    # def q_add_element(self, element: DEF_CMD, args=None):
-    # self.pipe_eng.put(Utils.q_element_create(element.value, args))
-
     def call_shutdown(self, msg=""):
+        """Request framework shutdown by enqueueing the exit command."""
         self.pipe_eng.element_push(DEF_CMD.FRAMEWORK_EXIT)
 
     def log_msg(self, msg, params={}):
