@@ -10,6 +10,7 @@ from engine.types import StepInterface
 from engine.utils import Utils
 from project.project import Project
 from project.instruments.types.instrument_scope import Scope
+from project.instruments.serial_instrument import InstrumentSerial
 
 logger = logging.getLogger("[user]")
 
@@ -32,14 +33,19 @@ class DutTest(Project):
 
     def build_dut_test(self):
         dut_flow_build = ProcedureBuilder("dut_test")
-        dut_flow_build.step_call(self.runtime_dut_test)
+        dut_flow_build.step_call(self.runtime_visa)
+        # dut_flow_build.step_call(self.runtime_dut_test)
         dut_flow = dut_flow_build.generate_procedure()
         return dut_flow
 
     def runtime_visa(self, step_interface: StepInterface):
         procedure, args = Utils.extract_step_interface(step_interface)
 
-        return msg
+        instrument = InstrumentSerial(6)
+        msg_from_visa = instrument.send_and_read(address=1, command=13, params={"param1": 22})
+        instrument.close()
+
+        return msg_from_visa
 
     def runtime_dut_test(self, step_interface: StepInterface):
         procedure, args = Utils.extract_step_interface(step_interface)
