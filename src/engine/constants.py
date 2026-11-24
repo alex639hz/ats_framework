@@ -11,6 +11,7 @@ LABEL_NONE = None
 LABEL_NAME = "__name__"
 DEF_DB_COL_SESSION = "session"
 DEF_DB_COL_TEST = "test"
+DEF_DB_COL_RUNTIME = "runtime"
 
 # engine feature flags: True = enabled
 ENGINE_FLAGS = {

@@ -6,7 +6,7 @@ import threading
 import time
 from datetime import datetime
 
-from engine.constants import DEF_CMD, DEF_OK, ENGINE_FLAGS
+from engine.constants import DEF_CMD, DEF_OK, DEF_DB_COL_RUNTIME, ENGINE_FLAGS
 from engine.context import Context
 from engine.logger import setup_logging
 from engine.pipeline import Pipeline
@@ -31,6 +31,7 @@ class Framework:
         self._procedure_list: list[Procedure] = []
         self._procedure_dict: dict[str, dict] = {}
         self.context: Context = Context(self)
+        self.context.attribute_set("start_time", self.get_time_datetime())
         self.server = Server()
 
         if USE_LOGGING:
@@ -230,6 +231,21 @@ class Framework:
         procedure.start()
         self.procedure_append(procedure)
 
+    def register_runtime(self):
+        """Insert a record for this run into the 'runtime' collection (keyed by start_time)."""
+        # imported here: project.db is outside the engine package
+        from project.db import database
+
+        start_time = self.context.attribute_get("start_time")
+        try:
+            res = database.insert_one(
+                DEF_DB_COL_RUNTIME,
+                {"start_time": start_time, "last_ping": start_time},
+            )
+            self.log_msg(f"runtime record created: {res.inserted_id}")
+        except Exception as err:
+            self.logger.error(f"runtime record not saved: {err}")
+
     def apply_engine_flags(self):
         """Start the features enabled in ENGINE_FLAGS (see engine/constants.py)."""
         if ENGINE_FLAGS["start_api_server"]:
@@ -248,4 +264,5 @@ class Framework:
 
 framework = Framework()
 framework.start()
+framework.register_runtime()
 framework.apply_engine_flags()
