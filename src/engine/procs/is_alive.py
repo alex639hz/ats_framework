@@ -42,7 +42,7 @@ def ensure_runtime_index():
     try:
         database.create_index(DEF_DB_COL_RUNTIME, "station_id")
     except Exception as err:
-        logging.getLogger("[is_alive]").error(f"runtime index not created: {err}")
+        logging.getLogger("[framework]").error(f"runtime index not created: {err}")
 
 
 def build_is_alive_procedure() -> Procedure:
