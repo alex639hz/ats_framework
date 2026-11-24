@@ -1,5 +1,7 @@
 """Heartbeat procedure: logs an 'alive' message at a fixed interval while the engine runs."""
 
+from pathlib import Path
+
 from engine.constants import DEF_DB_COL_RUNTIME
 from engine.procedure import Procedure
 from engine.procedure_builder import ProcedureBuilder
@@ -9,6 +11,8 @@ from project.db import database
 
 PROCEDURE_LABEL = "is_alive"
 HEARTBEAT_SECONDS = 1.0
+STATION_CONFIG_PATH = Path(__file__).resolve().parents[3] / "configs" / "station.json"
+STATION_ID = Utils.read_json(STATION_CONFIG_PATH)["station_id"]
 
 
 def runtime_heartbeat(step_interface: StepInterface):
@@ -22,7 +26,7 @@ def runtime_heartbeat(step_interface: StepInterface):
         database.update_one(
             DEF_DB_COL_RUNTIME,
             {"start_time": start_time},
-            {"last_ping": ping_time},
+            {"last_ping": ping_time, "station_id": STATION_ID},
         )
     except Exception as err:
         procedure.log_err(f"is_alive: last_ping not saved: {err}")
