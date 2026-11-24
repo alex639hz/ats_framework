@@ -18,8 +18,7 @@ logger = logging.getLogger("[user]")
 class DutTest(Project):
 
     def __init__(self, config):
-
-        # super().__init__(config)
+        super().__init__(config)
 
         dut_test = self.build_dut_test()
         USE_BASE_PROJECT = False
@@ -33,8 +32,8 @@ class DutTest(Project):
 
     def build_dut_test(self):
         dut_flow_build = ProcedureBuilder("dut_test")
-        dut_flow_build.step_call(self.runtime_visa)
-        # dut_flow_build.step_call(self.runtime_dut_test)
+        # dut_flow_build.step_call(self.runtime_visa)
+        dut_flow_build.step_call(self.runtime_dut_test)
         dut_flow = dut_flow_build.generate_procedure()
         return dut_flow
 

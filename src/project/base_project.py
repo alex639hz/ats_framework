@@ -3,6 +3,7 @@
 import logging
 
 # from engine import utils
+from engine.constants import DEF_OK
 from engine.framework import framework
 from engine.logger import create_log
 from engine.procedure import Procedure

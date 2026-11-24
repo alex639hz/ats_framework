@@ -3,7 +3,7 @@ from typing import cast
 
 import pyvisa
 from pyvisa import constants
-from pyvisa.resources import MessageBasedResource
+from pyvisa.resources import MessageBasedResource, SerialInstrument
 
 DEF_SERIAL_RESPONSE_DELAY_SECONDS = 1
 DEF_SERIAL_PORT_PREFIX = "ASRL"
@@ -32,7 +32,7 @@ class InstrumentSerial:
         print(f"found port: {self.port}")
 
         self.connection = cast(
-            MessageBasedResource, resource_manager.open_resource(self.port)
+            SerialInstrument, resource_manager.open_resource(self.port)
         )
         self.connection.baud_rate = 115200
         self.connection.parity = constants.Parity.none
@@ -41,7 +41,7 @@ class InstrumentSerial:
         self.connection.stop_bits = constants.StopBits.one
         self.connection.timeout = 50
         self.connection.read_termination = DEF_TERMINATION_CHAR
-        self.connection.write_termination = None
+        self.connection.write_termination = DEF_TERMINATION_CHAR
         self.connection.end_input = constants.SerialTermination.termination_char
 
     def send_and_read(self, address: int, command: int, params: dict) -> str:
