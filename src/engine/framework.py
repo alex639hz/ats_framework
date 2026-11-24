@@ -6,7 +6,7 @@ import threading
 import time
 from datetime import datetime
 
-from engine.constants import DEF_CMD, DEF_OK
+from engine.constants import DEF_CMD, DEF_OK, ENGINE_FLAGS
 from engine.context import Context
 from engine.logger import setup_logging
 from engine.pipeline import Pipeline
@@ -222,6 +222,21 @@ class Framework:
         self.server.run_server()
         pass
 
+    def start_is_alive(self):
+        # imported here: procs/is_alive -> procedure_builder -> framework (circular at module level)
+        from engine.procs.is_alive import build_is_alive_procedure
+
+        procedure = build_is_alive_procedure()
+        procedure.start()
+        self.procedure_append(procedure)
+
+    def apply_engine_flags(self):
+        """Start the features enabled in ENGINE_FLAGS (see engine/constants.py)."""
+        if ENGINE_FLAGS["start_api_server"]:
+            self.start_api_server()
+        if ENGINE_FLAGS["is_alive"]:
+            self.start_is_alive()
+
     @staticmethod
     def get_time_monotonic():
         return time.monotonic()
@@ -233,3 +248,4 @@ class Framework:
 
 framework = Framework()
 framework.start()
+framework.apply_engine_flags()

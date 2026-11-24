@@ -54,10 +54,12 @@ class DutTest(Project):
         msg = f"counter: {counter}"
         ONE_SECOND = 1
         MAX_SECONDS = 5
+        SHOULD_EXIT = False
         if counter < MAX_SECONDS:
             procedure.nextstate_sleep_and_repeat(ONE_SECOND)
         else:
             msg = f"completed: {counter}"
-            procedure.nextstate_exit()
+            if SHOULD_EXIT:
+                procedure.nextstate_exit()
 
         return msg
