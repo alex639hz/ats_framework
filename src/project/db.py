@@ -39,6 +39,10 @@ class Db:
         res = self._collection(collection).insert_one(update_doc)
         return res
 
+    def create_index(self, collection, field, unique=False):
+        """Create an index on field; a no-op if it already exists."""
+        return self._collection(collection).create_index([(field, 1)], unique=unique)
+
     def find_by_id(self, collection, _id):
         res = self.find_one(collection, {"_id": _id})  # [collection].find_one(query)
         return res

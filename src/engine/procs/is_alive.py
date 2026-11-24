@@ -1,5 +1,6 @@
 """Heartbeat procedure: logs an 'alive' message at a fixed interval while the engine runs."""
 
+import logging
 from pathlib import Path
 
 from engine.constants import DEF_DB_COL_RUNTIME
@@ -36,7 +37,16 @@ def runtime_heartbeat(step_interface: StepInterface):
     return f"alive: {ping_time.isoformat()} (count={count})"
 
 
+def ensure_runtime_index():
+    """Index the 'runtime' collection by station_id (no-op if the index already exists)."""
+    try:
+        database.create_index(DEF_DB_COL_RUNTIME, "station_id")
+    except Exception as err:
+        logging.getLogger("[is_alive]").error(f"runtime index not created: {err}")
+
+
 def build_is_alive_procedure() -> Procedure:
+    ensure_runtime_index()
     builder = ProcedureBuilder(PROCEDURE_LABEL)
     builder.step_call(runtime_heartbeat, label="heartbeat")
     return builder.generate_procedure()
