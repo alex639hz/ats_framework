@@ -1,11 +1,14 @@
 """Author: Alex Zvuluny | Email: alex.639hz@gmail.com"""
 
+import logging
 import threading
 from fastapi import FastAPI, Request, HTTPException
 from ats_engine.server.routes.routes_general import routerGeneral
 from ats_engine.framework import framework
 
 # import server_utils as server_utils
+
+logger = logging.getLogger("[framework]")
 
 server = FastAPI()
 
@@ -14,16 +17,16 @@ server = FastAPI()
 def snapshot():
     threads = threading.enumerate()
 
-    print(f"Active threads: {len(threads)}")
+    logger.info(f"Active threads: {len(threads)}")
     for t in threads:
-        print(f"Name: {t.name}, Alive: {t.is_alive()}, Daemon: {t.daemon}")
+        logger.info(f"Name: {t.name}, Alive: {t.is_alive()}, Daemon: {t.daemon}")
 
     return "test ok"
 
 
 @server.get("/exit")
 def exit():
-
+    logger.info("shutdown requested via API")
     framework.call_shutdown()
 
     return "test ok"
@@ -46,6 +49,7 @@ def register(server_id: str):
         framework.context.attribute_set("server_id", server_id)
         return {"status": "success", "server_id": server_id}
     except Exception as e:
+        logger.error(f"Failed to set server_id: {e}")
         raise HTTPException(
             status_code=500, detail=f"Failed to set server_id: {str(e)}"
         )
@@ -64,6 +68,7 @@ def get_config(server_id):
         framework.context.attribute_set("server_id", server_id)
         return {"status": "success", "server_id": server_id}
     except Exception as e:
+        logger.error(f"Failed to set server_id: {e}")
         raise HTTPException(
             status_code=500, detail=f"Failed to set server_id: {str(e)}"
         )
@@ -91,6 +96,7 @@ def get_procedure(id):
     except KeyError:
         raise HTTPException(status_code=404, detail=f"Procedure {id} not found")
     except Exception as e:
+        logger.error(f"Failed to get procedure {id}: {e}")
         raise HTTPException(
             status_code=500, detail=f"Failed to get procedure: {str(e)}"
         )

@@ -4,8 +4,7 @@ from pathlib import Path
 NOARG = {}
 DEF_NO_LABEL = ""
 DEF_OK = "OK"
-APP_FOLDER = Path("C:/ats_python")
-LOG_FOLDER = Path("C:/ats_log")
+LOG_FOLDER = Path("C:/ats_pack_log")
 
 LABEL_NONE = None
 LABEL_NAME = "__name__"
@@ -15,7 +14,7 @@ DEF_DB_COL_RUNTIME = "runtime"
 
 # engine feature flags: True = enabled
 ENGINE_FLAGS = {
-    "start_api_server": False,  # start the uvicorn API server when the framework starts
+    "start_api_server": True,  # start the uvicorn API server when the framework starts
 }
 
 

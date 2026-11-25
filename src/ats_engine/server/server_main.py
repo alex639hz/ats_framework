@@ -12,7 +12,7 @@ except ModuleNotFoundError:
 
 from ats_engine.utils import Utils
 
-logger = logging.getLogger("main")
+logger = logging.getLogger("[framework]")
 
 HOST = "127.0.0.1"
 PORT = 8088
@@ -33,7 +33,10 @@ class Server:
 
         from ats_engine.server.server_api import server
 
-        uvicorn.run(server, host=HOST, port=PORT, log_level="info")
+        # log_config=None: keep uvicorn from installing its own handlers, so its logs
+        # propagate to the root QueueHandler set up in ats_engine.logger
+        uvicorn.run(server, host=HOST, port=PORT, log_level="info", log_config=None)
+        logger.info("API server stopped")
 
     def run_server(self):
         self.server_thread.start()

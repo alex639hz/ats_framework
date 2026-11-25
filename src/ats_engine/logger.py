@@ -102,7 +102,7 @@ def setup_logging(q_log):
     console_handler.setFormatter(formatter)
     handlers: list[logging.Handler] = [console_handler]
 
-    if file_handler is isinstance(file_handler, RotatingFileHandler):
+    if isinstance(file_handler, RotatingFileHandler):
         file_handler.setLevel(LOG_LEVEL_FILE)
         file_handler.setFormatter(formatter)
         handlers.append(file_handler)
