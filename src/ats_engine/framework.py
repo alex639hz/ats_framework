@@ -219,9 +219,19 @@ class Framework:
         while not self.event_shutdown.is_set():
             time.sleep(0.1)
 
-    def start_api_server(self):
+    def api_router_add(self, router, **include_kwargs):
+        """Add a user FastAPI APIRouter to the API server.
+
+        include_kwargs go to FastAPI.include_router (prefix, tags, ...).
+        Call it before start_api_server(); calling it afterwards also works.
+        """
+        self.server.router_add(router, **include_kwargs)
+
+    def start_api_server(self, routers=None):
+        """Start the API server. routers: optional list of APIRouter to include first."""
+        for router in routers or []:
+            self.api_router_add(router)
         self.server.run_server()
-        pass
 
     def register_runtime(self):
         """Insert a record for this run into the 'runtime' collection (keyed by start_time)."""
