@@ -1,15 +1,15 @@
 """Author: Alex Zvuluny | Email: alex.639hz@gmail.com"""
 
-from dut_test import DutTest
+from example import ProjectExample
 from engine.framework import framework
 
 config = {
-    "phase": "A0",
-    "phases": ["A0", "A1", "A2"],
+    "name": "Alex",
+    "description": "Example project",
 }
 
 
-project = DutTest(config)
+project = ProjectExample(config)
 
 try:
 
