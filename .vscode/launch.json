@@ -13,6 +13,19 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "test user_api (e2e)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "tests/test_user_api_e2e.py",
+                "-v"
+            ],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "justMyCode": false
+        },
+        {
             "name": "virtual_scope",
             "type": "debugpy",
             "request": "launch",

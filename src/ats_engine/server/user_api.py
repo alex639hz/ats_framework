@@ -15,7 +15,7 @@ import logging
 from datetime import datetime
 
 from fastapi import APIRouter, HTTPException, Query
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from ats_engine.constants import DEF_DB_COL_USER, DEF_OK
 
@@ -27,12 +27,16 @@ EMAIL_PATTERN = r"^[^@\s]+@[^@\s]+$"
 
 
 class UserCreate(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True)
+
     email: str = Field(pattern=EMAIL_PATTERN)
     name: str | None = None
     role: str | None = None
 
 
 class UserUpdate(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True)
+
     email: str | None = Field(default=None, pattern=EMAIL_PATTERN)
     name: str | None = None
     role: str | None = None
