@@ -34,6 +34,12 @@ class Framework:
         self.context.attribute_set("start_time", self.get_time_datetime())
         self.server = Server()
 
+        if ENGINE_FLAGS["enable_api_user"]:
+            # imported here so fastapi is only needed when the user API is enabled
+            from ats_engine.server.user_api import routerUser
+
+            self.api_router_add(routerUser)
+
         if USE_LOGGING:
             self.log_listener = setup_logging(self.pipe_log.get_pipe())
             self.logger = logging.getLogger("[framework]")

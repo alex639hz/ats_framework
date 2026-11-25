@@ -31,6 +31,7 @@ class Db:
         res = self._collection(collection).update_one(
             query, {"$set": update_doc}, upsert=upsert
         )
+        return res
 
     def push_one(self, collection, query, push_doc, upsert=False):
         res = self._collection(collection).update_one(
@@ -51,6 +52,15 @@ class Db:
 
     def find_one(self, collection, query):
         res = self._collection(collection).find_one(query)
+        return res
+
+    def find_many(self, collection, query=None, skip=0, limit=0):
+        """Return a list of documents matching query (limit=0 means no limit)."""
+        cursor = self._collection(collection).find(query or {}).skip(skip).limit(limit)
+        return list(cursor)
+
+    def delete_one(self, collection, query):
+        res = self._collection(collection).delete_one(query)
         return res
 
 

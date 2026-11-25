@@ -11,10 +11,12 @@ LABEL_NAME = "__name__"
 DEF_DB_COL_SESSION = "session"
 DEF_DB_COL_TEST = "test"
 DEF_DB_COL_RUNTIME = "runtime"
+DEF_DB_COL_USER = "user"
 
 # engine feature flags: True = enabled
 ENGINE_FLAGS = {
     "start_api_server": True,  # start the uvicorn API server when the framework starts
+    "enable_api_user": True,  # add the user CRUD router (/users) to the API server
 }
 
 
