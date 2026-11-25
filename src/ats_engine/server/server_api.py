@@ -3,6 +3,7 @@
 import logging
 import threading
 from fastapi import FastAPI, Request, HTTPException
+from ats_engine.constants import DEF_OK
 from ats_engine.server.routes.routes_general import routerGeneral
 from ats_engine.framework import framework
 
@@ -11,6 +12,34 @@ from ats_engine.framework import framework
 logger = logging.getLogger("[framework]")
 
 server = FastAPI()
+
+
+@server.post("/start/{proc_name}")
+def start(proc_name: str):
+    """Start a procedure by its label, e.g. POST /start/dut_test."""
+    try:
+        procedure = framework.procedure_get_by_label(proc_name)
+    except KeyError:
+        raise HTTPException(status_code=404, detail=f"Procedure '{proc_name}' not found")
+
+    # queue the start on the engine thread (the engine is single-threaded)
+    procedure.push_start_request()
+    logger.info(f"start requested via API: {proc_name}")
+    return {"status": DEF_OK, "procedure": proc_name}
+
+
+@server.post("/stop/{proc_name}")
+def stop(proc_name: str):
+    """Stop a procedure by its label, e.g. POST /stop/dut_test. Resume with /start."""
+    try:
+        procedure = framework.procedure_get_by_label(proc_name)
+    except KeyError:
+        raise HTTPException(status_code=404, detail=f"Procedure '{proc_name}' not found")
+
+    # queue the stop on the engine thread (the engine is single-threaded)
+    procedure.push_stop_request()
+    logger.info(f"stop requested via API: {proc_name}")
+    return {"status": DEF_OK, "procedure": proc_name}
 
 
 @server.get("/test")

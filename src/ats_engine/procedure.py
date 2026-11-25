@@ -27,6 +27,8 @@ class Procedure:
         self._steps: list["Step"] = []
         self._index = 0
         self._is_running = False
+        # stopped from outside (API); sleep timers must not wake it until resumed
+        self._is_halted = False
         self._is_first_run = True
         self._nextstate = self.nextstate_init()
 
@@ -116,6 +118,19 @@ class Procedure:
         self._is_running = False
         return self
 
+    def is_halted(self):
+        return self._is_halted
+
+    def halt(self):
+        """Stop the procedure and keep it stopped: pending sleep timers will not wake it."""
+        self._is_halted = True
+        return self.stop()
+
+    def resume(self):
+        """Clear a halt and run the procedure again from its current step."""
+        self._is_halted = False
+        return self.start()
+
     def push_awake_request(self, sleep_seconds=None):
         if sleep_seconds != None:
             start_at = self.framework.get_time_monotonic()
@@ -138,6 +153,9 @@ class Procedure:
         }
 
         self.framework.pipe_eng.element_push(cmd, args)
+
+    def push_stop_request(self):
+        self.framework.pipe_eng.element_push(DEF_CMD.PROCEDURE_STOP, {"procedure": self})
 
     def call_init(self):
         self.framework.pipe_eng.element_push(

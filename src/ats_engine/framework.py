@@ -63,7 +63,8 @@ class Framework:
                 is_ready = self.check_timer(element)
                 if is_ready:
                     procedure: Procedure = element["payload"]["procedure"]
-                    procedure.start()
+                    if not procedure.is_halted():
+                        procedure.start()
                 else:
                     arr.append(element)
                 continue
@@ -151,7 +152,8 @@ class Framework:
             delta = now - start_at
             if delta > sleep_seconds:
                 # TODO call q_eng.set("start_procedure",procedure)
-                procedure.start()
+                if not procedure.is_halted():
+                    procedure.start()
                 pass
             else:
                 self.pipe_eng.element_push(
@@ -162,13 +164,20 @@ class Framework:
 
         def procedure_start(args={}):
             procedure: Procedure = args["procedure"]
-            procedure.start()
+            procedure.resume()
+
+            return
+
+        def procedure_stop(args={}):
+            procedure: Procedure = args["procedure"]
+            procedure.halt()
 
             return
 
         func_dict = {
             DEF_CMD.PROCEDURE_INIT: procedure_init,
             DEF_CMD.PROCEDURE_START: procedure_start,
+            DEF_CMD.PROCEDURE_STOP: procedure_stop,
             DEF_CMD.PROCEDURE_PAUSE: func,
             DEF_CMD.PROCEDURE_APPEND: add_new_procedure,
             DEF_CMD.PROCEDURE_DELETE: delete_procedure,
