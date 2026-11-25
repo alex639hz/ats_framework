@@ -3,11 +3,11 @@
 import logging
 
 # from engine.framework import framework
-from engine.constants import *
-from engine.framework import framework
-from engine.procedure_builder import ProcedureBuilder
-from engine.types import StepInterface
-from engine.utils import Utils
+from ats_engine.constants import *
+from ats_engine.framework import framework
+from ats_engine.procedure_builder import ProcedureBuilder
+from ats_engine.types import StepInterface
+from ats_engine.utils import Utils
 
 logger = logging.getLogger("[user]")
 
@@ -15,14 +15,10 @@ logger = logging.getLogger("[user]")
 class ProjectExample:
 
     def __init__(self, config):
-        super().__init__(config)
+        self.config = config
 
         dut_test = self.build_dut_test()
-        USE_BASE_PROJECT = False
-        if USE_BASE_PROJECT:
-            final_procedure = self.project_export(dut_test)
-        else:
-            final_procedure = dut_test
+        final_procedure = dut_test
 
         final_procedure.start()
         framework.procedure_append(final_procedure)

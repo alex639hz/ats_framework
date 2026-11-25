@@ -1,7 +1,7 @@
 """Author: Alex Zvuluny | Email: alex.639hz@gmail.com"""
 
 from example import ProjectExample
-from engine.framework import framework
+from ats_engine.framework import framework
 
 config = {
     "name": "Alex",

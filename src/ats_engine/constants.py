@@ -15,7 +15,6 @@ DEF_DB_COL_RUNTIME = "runtime"
 
 # engine feature flags: True = enabled
 ENGINE_FLAGS = {
-    "is_alive": True,  # launch the is_alive heartbeat procedure (engine/procs/is_alive.py)
     "start_api_server": False,  # start the uvicorn API server when the framework starts
 }
 

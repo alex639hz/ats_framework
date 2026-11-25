@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ats-engine"
+version = "0.1.0"
+description = "Python automation framework and single-threaded runtime engine with a built-in API server"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Alex Zvuluny" }]
+dependencies = [
+    "pymongo>=4.0",
+    "fastapi>=0.100",
+    "uvicorn>=0.20",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-mock"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["ats_engine*"]

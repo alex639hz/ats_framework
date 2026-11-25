@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Any, Tuple, NewType, TypeAlias, TypedDict
 
 if TYPE_CHECKING:
-    from engine.procedure import Procedure
+    from ats_engine.procedure import Procedure
 
 from typing import Any, TypeAlias
 

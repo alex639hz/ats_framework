@@ -5,10 +5,10 @@ import threading
 import logging
 from typing import TYPE_CHECKING, Final
 from pathlib import Path
-from engine.constants import *
+from ats_engine.constants import *
 
 if TYPE_CHECKING:
-    from engine.types import LogInterface, StepInterface
+    from ats_engine.types import LogInterface, StepInterface
 
     # from project.types import *
 

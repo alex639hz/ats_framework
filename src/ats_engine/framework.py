@@ -6,13 +6,13 @@ import threading
 import time
 from datetime import datetime
 
-from engine.constants import DEF_CMD, DEF_OK, DEF_DB_COL_RUNTIME, ENGINE_FLAGS
-from engine.context import Context
-from engine.logger import setup_logging
-from engine.pipeline import Pipeline
-from engine.procedure import Procedure
-from engine.server.server_main import Server
-from engine.utils import Utils
+from ats_engine.constants import DEF_CMD, DEF_OK, DEF_DB_COL_RUNTIME, ENGINE_FLAGS
+from ats_engine.context import Context
+from ats_engine.logger import setup_logging
+from ats_engine.pipeline import Pipeline
+from ats_engine.procedure import Procedure
+from ats_engine.server.server_main import Server
+from ats_engine.utils import Utils
 
 # from engine.server.server_main import run_server
 
@@ -223,18 +223,10 @@ class Framework:
         self.server.run_server()
         pass
 
-    def start_is_alive(self):
-        # imported here: procs/is_alive -> procedure_builder -> framework (circular at module level)
-        from engine.procs.is_alive import build_is_alive_procedure
-
-        procedure = build_is_alive_procedure()
-        procedure.start()
-        self.procedure_append(procedure)
-
     def register_runtime(self):
         """Insert a record for this run into the 'runtime' collection (keyed by start_time)."""
-        # imported here: project.db is outside the engine package
-        from project.db import database
+        # imported here: engine.db connects to MongoDB on import
+        from ats_engine.db import database
 
         start_time = self.context.attribute_get("start_time")
         try:
@@ -250,8 +242,6 @@ class Framework:
         """Start the features enabled in ENGINE_FLAGS (see engine/constants.py)."""
         if ENGINE_FLAGS["start_api_server"]:
             self.start_api_server()
-        if ENGINE_FLAGS["is_alive"]:
-            self.start_is_alive()
 
     @staticmethod
     def get_time_monotonic():

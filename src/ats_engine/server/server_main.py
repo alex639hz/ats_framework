@@ -10,7 +10,7 @@ except ModuleNotFoundError:
     uvicorn = None
 
 
-from engine.utils import Utils
+from ats_engine.utils import Utils
 
 logger = logging.getLogger("main")
 
@@ -31,7 +31,7 @@ class Server:
             logger.warning("uvicorn is not installed; API server was not started")
             return
 
-        from engine.server.server_api import server
+        from ats_engine.server.server_api import server
 
         uvicorn.run(server, host=HOST, port=PORT, log_level="info")
 
